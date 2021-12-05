@@ -1,11 +1,15 @@
 import React from 'react';
-// import StripeCheckout from 'react-stripe-checkout';
+import StripeCheckout from 'react-stripe-checkout';
 // import axios from 'axios';
 
-// const StripeCheckoutButton = ({ price }) => {
-//   const priceForStripe = price * 100;
-//   const publishableKey = 'pk_test_b7a3hFL5nC3qlBCZ6bQACpez00gyMMP52H';
+const StripeCheckoutButton = ({ price }) => {
+  const priceForStripe = price * 100;
+  const publishableKey = 'pk_test_51K3L3BFb41XjsWf0FA4EHrCR3u7NoLR5ZYc2Ff0UlK7ad4yjsroYJdowaxdrmICnaSjrhKj5lL5SvJA411LRANzs00iHmNNwYz';
 
+  const onToken = token => {
+      console.log(token);
+      alert('Payment Successful!');
+  }
 //   const onToken = token => {
 //     axios({
 //       url: '/payment',
@@ -26,20 +30,20 @@ import React from 'react';
 //       });
 //   };
 
-//   return (
-//     <StripeCheckout
-//       label='Pay Now'
-//       name='CRWN Clothing Ltd.'
-//       billingAddress
-//       shippingAddress
-//       image='https://svgshare.com/i/CUz.svg'
-//       description={`Your total is $${price}`}
-//       amount={priceForStripe}
-//       panelLabel='Pay Now'
-//       token={onToken}
-//       stripeKey={publishableKey}
-//     />
-//   );
-// };
+  return (
+    <StripeCheckout
+      label='Pay Now'
+      name='CRWN Clothing Ltd.'
+      billingAddress
+      shippingAddress
+      image='https://svgshare.com/i/CUz.svg'
+      description={`Your total is $${price}`}
+      amount={priceForStripe}
+      panelLabel='Pay Now'
+      token={onToken}
+      stripeKey={publishableKey}
+    />
+  );
+};
 
-// export default StripeCheckoutButton;
+export default StripeCheckoutButton;
