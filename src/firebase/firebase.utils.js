@@ -17,10 +17,13 @@ export const createUserProfileDocument = async(userAuth, additionalData) => {
     if(!userAuth) return;
 
     const userRef = firestore.doc(`users/${userAuth.uid}`);
+    // const collectionRef = firestore.collection('users');
 
-    const snapShot = await userRef.get()
+    const snapShot = await userRef.get();
+    // const collectionSnapshot = await collectionRef.get();
+    // console.log({ collection: collectionSnapshot.docs.map(doc => doc.data()) });
 
-    //console.log(snapShot);
+    //console.log(snapShot.data());
 
     if(!snapShot.exists) {
         const { displayName, email } = userAuth;
@@ -41,6 +44,51 @@ export const createUserProfileDocument = async(userAuth, additionalData) => {
 
     return userRef;
 }
+
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+    const collectionRef = firestore.collection(collectionKey);
+    // console.log(collectionRef);
+
+    const batch = firestore.batch();
+    objectsToAdd.forEach(obj => {
+        const newDocRef = collectionRef.doc();
+        // console.log(newDocRef);
+        batch.set(newDocRef, obj);
+    });
+
+    return await batch.commit();
+};
+
+// export const convertCollectionSnapshotToMap = collectionSnapshot => {
+//     const transformedCollection = collectionSnapshot.docs.map(docSnapshot => {
+//         const { title, items } = docSnapshot.data();
+
+
+//         return {
+//             routeName: encodeURI(title.toLowerCase()),
+//             id: docSnapshot.id,
+//             title,
+//             items
+//         };
+//     });
+export const convertCollectionSnapshotToMap = collections => {
+    const transformedCollection = collections.docs.map(docSnapshot => {
+      const { title, items } = docSnapshot.data();
+  
+      return {
+        routeName: encodeURI(title.toLowerCase()),
+        id: docSnapshot.id,
+        title,
+        items
+      };
+    });
+
+    // console.log(transformedCollection);
+    return transformedCollection.reduce((accumulator, collection) => {
+        accumulator[collection.title.toLowerCase()] = collection;
+        return accumulator;
+     }, {});
+};
 
 firebase.initializeApp(config);
 
